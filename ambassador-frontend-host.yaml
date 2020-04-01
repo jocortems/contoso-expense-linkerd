@@ -1,0 +1,20 @@
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: linkerd-dashboard
+# Must be in the same namespace as the Mapping object
+  namespace: conexp
+spec:
+# Must match the host defined in the Mapping object
+  hostname: linkerd-dashboard.srinipadala.xyz
+  acmeProvider:
+# Must be a valid email address for certificate management
+    email: jocorte@microsoft.com
+# Authority is not needed and defaults to Let's Encrypt production endpoint
+# Note however that the production endpoint has very aggressive rate limiting
+# For testing it is recommended to use the staging endpoint
+    authority: https://acme-staging-v02.api.letsencrypt.org/directory
+# TLS Secret is not needed, AES will create one by default, however in order to
+# Facilitate troubleshooting and enforce naming convetion we are specifying it manually
+  tlsSecret:
+    name: linkerd-dashboard

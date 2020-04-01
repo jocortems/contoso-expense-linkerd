@@ -1,0 +1,10 @@
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: linkerd-dashboard
+  namespace: conexp
+spec:
+  prefix: /
+  service: linkerd-web.linkerd:8084
+  host: linkerd-dashboard.srinipadala.xyz
+  host_rewrite: linkerd-web.linkerd.svc.cluster.local

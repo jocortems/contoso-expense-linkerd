@@ -1,0 +1,23 @@
+apiVersion: getambassador.io/v2
+kind: Filter
+metadata:
+  name: azure-ad
+  namespace: conexp
+spec:
+  OAuth2:
+    authorizationURL: https://login.microsoftonline.com/dd960d1c-84f6-4f2c-b8c1-fe3608e751bc/v2.0
+    clientURL: https://linkerd-dashboard.srinipadala.xyz
+    clientID: a3d4a29d-24c6-4c86-b4cd-0828195ea06f
+    secret: a6f/1R/]KrPS[PBLgYl5yxofkVEWvHN9
+---
+apiVersion: getambassador.io/v2
+kind: FilterPolicy
+metadata:
+  name: azure-policy
+  namespace: conexp
+spec:
+  rules:
+    - host: linkerd-dashboard.srinipadala.xyz
+      path: /
+      filters:
+        - name: azure-ad

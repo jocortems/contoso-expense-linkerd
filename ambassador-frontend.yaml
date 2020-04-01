@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ambassador-frontend
+  namespace: conexp
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v2
+      kind: Mapping
+      name: backend-mapping
+      service: backend-svc
+      host: ambassador-frontend.srinipadala.xyz
+      prefix: /Expenses
+      add_linkerd_headers: true
+      ---
+      apiVersion: ambassador/v2
+      kind: Mapping
+      name: frontend-mapping
+      service: ambassador-frontend
+      host: ambassador-frontend.srinipadala.xyz
+      prefix: /
+      add_linkerd_headers: true
+      ---
+      apiVersion: ambassador/v2
+      kind: Mapping
+      name: frontend-files-mapping
+      service: ambassador-frontend
+      precedence: 10
+      host: ambassador-frontend.srinipadala.xyz
+      prefix: "/(js|css)/site\\.min\\.(js|css)"
+      prefix_regex: true
+      rewrite: ""
+      add_linkerd_headers: true
+      ---
+      apiVersion: ambassador/v2
+      kind: Mapping
+      name: backend-files-mapping
+      service: backend-svc
+      host: ambassador-frontend.srinipadala.xyz
+      prefix: "(/[a-z0-9-]+)*/[a-z0-9-]+(\\.[a-z]+)+"
+      prefix_regex: true
+      rewrite: ""
+      add_linkerd_headers: true
+  labels:
+    app: conexp-frontend
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: conexp-frontend
